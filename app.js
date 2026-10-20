@@ -1,6 +1,3 @@
-/* Scholarship Monitoring and Academic Compliance - browser client.
-   All rules and access control live in Supabase (RLS + SQL functions);
-   this file only calls them and displays results. */
 (() => {
   const cfg = window.APP_CONFIG || {};
   const sb = supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
@@ -13,7 +10,7 @@
     openId: null, editId: null
   };
 
-  // ---------- helpers ----------
+ 
   const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
   const manila = ts => ts ? new Date(ts).toLocaleString('en-PH', { timeZone: 'Asia/Manila', hour12: false,
       year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' (Manila)' : '';
@@ -30,7 +27,7 @@
     return { data };
   }
 
-  // ---------- data loading ----------
+
   async function loadData() {
     const isStaff = state.me.role === 'staff';
     const [p, a, s] = await Promise.all([
@@ -52,7 +49,7 @@
     return a ? state.programs.find(p => p.id === a.program_id) : null;
   };
 
-  // ---------- auth ----------
+ 
   async function boot() {
     clearMsg();
     const { data: { session } } = await sb.auth.getSession();
@@ -96,12 +93,10 @@
   }
   document.querySelector('#logout').onclick = async () => { await sb.auth.signOut(); state.me = null; renderLogin(); };
 
-  // ---------- routing ----------
+
   function render() { state.me.role === 'staff' ? renderStaff() : renderScholar(); }
 
-  // =====================================================================
-  // SCHOLAR
-  // =====================================================================
+ 
   function renderScholar() {
     const prog = programOf(state.me.id);
     const editing = state.subs.find(s => s.id === state.editId);
@@ -166,9 +161,7 @@
       </tbody></table></div>`;
   }
 
-  // =====================================================================
-  // STAFF
-  // =====================================================================
+ 
   function renderStaff() {
     const tabs = [['dashboard', 'Dashboard'], ['scholars', 'Scholars'], ['policies', 'Policies']];
     app.innerHTML = `<nav class="tabs">${tabs.map(([k, l]) => `<button data-act="tab" data-id="${k}" class="${state.tab === k ? 'active' : ''}">${l}</button>`).join('')}</nav>
@@ -233,7 +226,7 @@
           <div><label for="rprog">Program</label><select id="rprog">${state.programs.map(p => `<option value="${p.id}">${esc(p.name)}</option>`).join('')}</select></div>
         </div>
         <p><button type="submit">Register scholar</button></p>
-        <p class="muted">The scholar's Supabase Auth login must use this same email.</p>
+     
       </form>
       <div class="panel"><h2>Assigned scholars</h2><div class="tablewrap"><table><thead><tr><th>Student ID</th><th>Name</th><th>Email</th><th>Program</th></tr></thead><tbody>
         ${state.assignments.filter(a => a.profiles).sort((x, y) => x.profiles.student_id.localeCompare(y.profiles.student_id)).map(a =>
@@ -243,7 +236,6 @@
 
   function policiesHtml() {
     return `<div class="panel"><h2>Policy records</h2>
-      <p class="muted">Evaluation reads these stored values. Nothing is hard-coded in the evaluation function.</p>
       <div class="tablewrap"><table><thead><tr><th>Program</th><th>Max GWA</th><th>Min units</th><th>Failed allowed</th><th>INC allowed</th><th>Dropped allowed</th><th>Deadline</th></tr></thead><tbody>
       ${state.programs.map(p => `<tr><td>${esc(p.name)}</td><td>${esc(Number(p.max_gwa).toFixed(2))}</td><td>${p.min_units}</td><td>${p.max_failed}</td><td>${p.max_incomplete}</td><td>${p.max_dropped}</td><td>${esc(manila(p.deadline))}</td></tr>`).join('')}
       </tbody></table></div></div>`;
@@ -264,9 +256,7 @@
     };
   }
 
-  // =====================================================================
-  // SHARED: submission detail + history (staff actions only for staff)
-  // =====================================================================
+
   async function renderDetail(id) {
     const s = state.subs.find(x => x.id === id); const box = document.querySelector('#detail');
     if (!s || !box) return;
@@ -329,7 +319,6 @@
     await loadData(); state.openId = id; renderStaff();
   }
 
-  // ---------- shared action binding ----------
   function bindActions() {
     app.querySelectorAll('[data-act]').forEach(b => b.onclick = () => {
       const act = b.dataset.act, id = b.dataset.id;
