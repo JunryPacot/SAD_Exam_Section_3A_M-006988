@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scholarship Monitoring and Compliance</title>
+<style>
+  :root {
+    --ink:#1b2430; --muted:#5b6675; --line:#d5dbe3; --bg:#f3f5f8; --panel:#ffffff;
+    --brand:#1f4e79; --brand-ink:#ffffff;
+    --ok:#1b6b3a; --ok-bg:#e1f3e8; --bad:#9b2c2c; --bad-bg:#fbe5e5;
+    --warn:#8a5a00; --warn-bg:#fdf0d5; --info:#1f4e79; --info-bg:#e3edf7;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; font:15px/1.5 "Segoe UI", system-ui, sans-serif; color:var(--ink); background:var(--bg); }
+  header { background:var(--brand); color:var(--brand-ink); padding:12px 20px; display:flex; gap:16px; align-items:center; flex-wrap:wrap; }
+  header h1 { font-size:17px; margin:0; font-weight:600; flex:1; min-width:220px; }
+  header .who { font-size:13px; opacity:.9; }
+  main { max-width:1100px; margin:0 auto; padding:20px; }
+  .panel { background:var(--panel); border:1px solid var(--line); border-radius:6px; padding:16px; margin-bottom:16px; }
+  h2 { font-size:16px; margin:0 0 12px; }
+  h3 { font-size:14px; margin:16px 0 8px; }
+  label { display:block; font-size:13px; color:var(--muted); margin-bottom:2px; }
+  input, select, textarea, button { font:inherit; }
+  input, select, textarea { width:100%; padding:7px 9px; border:1px solid var(--line); border-radius:4px; background:#fff; color:var(--ink); }
+  textarea { min-height:60px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(170px, 1fr)); gap:12px; }
+  .row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+  button { padding:7px 14px; border:1px solid var(--brand); background:var(--brand); color:#fff; border-radius:4px; cursor:pointer; }
+  button.secondary { background:#fff; color:var(--brand); }
+  button.danger { background:var(--bad); border-color:var(--bad); }
+  button.good { background:var(--ok); border-color:var(--ok); }
+  button:disabled { opacity:.5; cursor:not-allowed; }
+  button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline:3px solid #f2b705; outline-offset:1px; }
+  nav.tabs { display:flex; gap:6px; margin-bottom:14px; }
+  nav.tabs button { background:#fff; color:var(--brand); }
+  nav.tabs button.active { background:var(--brand); color:#fff; }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th, td { text-align:left; padding:8px 10px; border-bottom:1px solid var(--line); vertical-align:top; }
+  th { font-size:12.5px; color:var(--muted); font-weight:600; }
+  .tablewrap { overflow-x:auto; }
+  .stats { display:grid; grid-template-columns:repeat(auto-fit, minmax(190px,1fr)); gap:12px; margin-bottom:16px; }
+  .stat { background:var(--panel); border:1px solid var(--line); border-radius:6px; padding:12px 14px; }
+  .stat b { font-size:26px; display:block; line-height:1.1; }
+  .stat span { color:var(--muted); font-size:13px; }
+  .badge { display:inline-block; padding:1px 8px; border-radius:10px; font-size:12.5px; font-weight:600; }
+  .b-ok { background:var(--ok-bg); color:var(--ok); } .b-bad { background:var(--bad-bg); color:var(--bad); }
+  .b-warn { background:var(--warn-bg); color:var(--warn); } .b-info { background:var(--info-bg); color:var(--info); }
+  .b-none { background:#eceff3; color:var(--muted); }
+  #msg { position:sticky; top:0; z-index:5; margin:0 0 14px; padding:10px 14px; border-radius:6px; display:none; font-weight:500; }
+  #msg.error { display:block; background:var(--bad-bg); color:var(--bad); border:1px solid #e0b4b4; }
+  #msg.success { display:block; background:var(--ok-bg); color:var(--ok); border:1px solid #a9d6b9; }
+  .statuses { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:10px; margin:10px 0; }
+  .statuses div { border:1px solid var(--line); border-radius:6px; padding:8px 10px; }
+  .statuses small { color:var(--muted); display:block; }
+  .pass { color:var(--ok); font-weight:600; } .fail { color:var(--bad); font-weight:600; }
+  ul.clean { margin:6px 0; padding-left:18px; }
+  .muted { color:var(--muted); font-size:13px; }
+  .login { max-width:380px; margin:60px auto; }
+  @media (max-width:600px){ main{padding:12px;} }
+</style>
+</head>
+<body>
+<header>
+  <h1>Scholarship Monitoring and Academic Compliance</h1>
+  <span class="who" id="who"></span>
+  <button class="secondary" id="logout" style="display:none">Log out</button>
+</header>
+<main>
+  <div id="msg" role="alert" aria-live="polite"></div>
+  <div id="app"></div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
